@@ -10,16 +10,8 @@ const addproduct = async (req, res) => {
         const parsedSizes = Array.isArray(sizes) ? sizes : JSON.parse(sizes);
 
         // Upload images to Cloudinary
-        const imageUrls = [];
-        const files = req.files;
+        const imageUrls = req.body.images; // Already uploaded from frontend
 
-        for (let key in files) {
-            const file = files[key][0]; // multer gives array per field name
-            const result = await cloudinary.uploader.upload(file.path, {
-                folder: "products" // optional folder name in Cloudinary
-            });
-            imageUrls.push(result.secure_url);
-        }
 
         // Prepare product data
         const productData = {
