@@ -58,7 +58,7 @@ const Add = ({ token }) => {
                 sizes,
                 images: imageUrls,
             };
-            console.log("🔁 Sending payload to backend:", payload);
+            // console.log("🔁 Sending payload to backend:", payload);
 
 
             const response = await axios.post(`${backendUrl}/api/product/add`, payload, {
