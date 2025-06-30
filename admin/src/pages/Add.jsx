@@ -58,10 +58,16 @@ const Add = ({ token }) => {
                 sizes,
                 images: imageUrls,
             };
+            console.log("🔁 Sending payload to backend:", payload);
+
 
             const response = await axios.post(`${backendUrl}/api/product/add`, payload, {
-                headers: { token },
+                headers: {
+                    token,
+                    "Content-Type": "application/json"
+                },
             });
+
 
             if (response.data.success) {
                 toast.success(response.data.message);
