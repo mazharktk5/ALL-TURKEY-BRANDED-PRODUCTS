@@ -42,12 +42,12 @@ const Add = ({ token }) => {
 
 
             // Append product info
-            formData.append("name", name);
-            formData.append("description", description);
-            formData.append("category", category);
-            formData.append("subCategory", subCategory);
-            formData.append("price", price);
-            formData.append("bestseller", isBestSeller ? "true" : "false");
+            // formData.append("name", name);
+            // formData.append("description", description);
+            // formData.append("category", category);
+            // formData.append("subCategory", subCategory);
+            // formData.append("price", price);
+            // formData.append("bestseller", isBestSeller ? "true" : "false");
 
 
             // Append selected sizes as comma-separated string
