@@ -4,6 +4,9 @@ import ProductModel from "../models/productmodel.js";
 // add products
 const addproduct = async (req, res) => {
     try {
+         console.log("===== ADD PRODUCT API CALLED =====");
+        console.log("Received payload:", req.body);
+        console.log("Received images:", req.body.images);
         const { name, description, price, category, subCategory, sizes, bestseller } = req.body;
 
         // Parse sizes if it's a JSON string
@@ -26,7 +29,7 @@ const addproduct = async (req, res) => {
             date: Date.now()
         };
 
-        console.log("Received payload:", req.body);
+
 
 
         const product = new ProductModel(productData);
