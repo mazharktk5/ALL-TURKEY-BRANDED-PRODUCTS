@@ -26,6 +26,9 @@ const addproduct = async (req, res) => {
             date: Date.now()
         };
 
+        console.log("Received payload:", req.body);
+
+
         const product = new ProductModel(productData);
         await product.save();
 
