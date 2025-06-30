@@ -19,7 +19,7 @@ const Navbar = () => {
         navigate('/login');
         localStorage.removeItem('token');
         setToken('');
-        setCartItems({}); // ✅ Fix: Clear cart immediately
+        setCartItems({});
         toast.success('Logged Out');
     };
 
@@ -27,6 +27,7 @@ const Navbar = () => {
         <div className="flex justify-between items-center py-5 font-medium">
             <Link to="/">
                 <img src={assets.logo} className="w-36" alt="Logo" />
+                {/* <h2 className='font-bold text-2xl'> TURKEY BRANDED PRODUCTS</h2> */}
             </Link>
 
             <ul className="hidden sm:flex gap-5 text-sm text-gray-700">

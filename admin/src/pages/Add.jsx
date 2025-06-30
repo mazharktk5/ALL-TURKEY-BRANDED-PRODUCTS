@@ -24,7 +24,22 @@ const Add = ({ token }) => {
         e.preventDefault();
 
         try {
-            const formData = new FormData();
+            // const formData = new FormData();
+            const uploadToCloudinary = async (file) => {
+                const data = new FormData();
+                data.append("file", file);
+                data.append("upload_preset", "my_unsigned_preset"); // Replace with your actual preset
+                data.append("cloud_name", "dfqaf1gg7");
+
+                const res = await fetch("https://api.cloudinary.com/v1_1/dfqaf1gg7/image/upload", {
+                    method: "POST",
+                    body: data,
+                });
+
+                const json = await res.json();
+                return json.secure_url;
+            };
+
 
             // Append product info
             formData.append("name", name);
@@ -39,14 +54,34 @@ const Add = ({ token }) => {
             formData.append("sizes", JSON.stringify(sizes));
 
             // Append images (only if selected)
-            if (image1) formData.append("image1", image1);
-            if (image2) formData.append("image2", image2);
-            if (image3) formData.append("image3", image3);
-            if (image4) formData.append("image4", image4);
+            // if (image1) formData.append("image1", image1);
+            // if (image2) formData.append("image2", image2);
+            // if (image3) formData.append("image3", image3);
+            // if (image4) formData.append("image4", image4);
+            let imageUrls = [];
+
+            if (image1) imageUrls.push(await uploadToCloudinary(image1));
+            if (image2) imageUrls.push(await uploadToCloudinary(image2));
+            if (image3) imageUrls.push(await uploadToCloudinary(image3));
+            if (image4) imageUrls.push(await uploadToCloudinary(image4));
+
 
             //  Send the formData to backend
-            const response = await axios.post(backendUrl + "/api/product/add", formData, { headers: { token } });
-            console.log(response.data);
+            const payload = {
+                name,
+                description,
+                category,
+                subCategory,
+                price,
+                bestseller: isBestSeller,
+                sizes,
+                images: imageUrls,
+            };
+
+            const response = await axios.post(`${backendUrl}/api/product/add`, payload, {
+                headers: { token },
+            });
+            console.log("Response:", response.data);
 
             if (response.data) {
                 toast.success(response.data.message)

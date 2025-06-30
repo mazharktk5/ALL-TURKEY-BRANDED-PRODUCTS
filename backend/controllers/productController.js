@@ -4,67 +4,51 @@ import ProductModel from "../models/productmodel.js";
 // add products
 const addproduct = async (req, res) => {
     try {
-
-
         const { name, description, price, category, subCategory, sizes, bestseller } = req.body;
 
-        const image1 =req.files.image1 && req.files.image1[0];
-        const image2 =req.files.image2 && req.files.image2[0];
-        const image3 =req.files.image3 && req.files.image3[0];
-        const image4 =req.files.image4 && req.files.image4[0];
+        // Parse sizes if it's a JSON string
+        const parsedSizes = Array.isArray(sizes) ? sizes : JSON.parse(sizes);
 
-        const images = [image1,image2,image3,image4].filter((item)=>item !== undefined)
+        // Upload images to Cloudinary
+        const imageUrls = [];
+        const files = req.files;
 
-        let imagesUrl = await Promise.all(
-            images.map(async (item)=>{
-                let result = await cloudinary.uploader.upload(item.path,{resource_type:'image'})
+        for (let key in files) {
+            const file = files[key][0]; // multer gives array per field name
+            const result = await cloudinary.uploader.upload(file.path, {
+                folder: "products" // optional folder name in Cloudinary
+            });
+            imageUrls.push(result.secure_url);
+        }
 
-                return result.secure_url
-            })
-        )
-
-
-        // console.log("Product Info:", name, description, price, category, subCategory, sizes, bestseller);
-        // console.log("Uploaded Files:", imagesUrl);
-
+        // Prepare product data
         const productData = {
             name,
             description,
             category,
-            price: Number(price),
             subCategory,
-            bestseller:bestseller === "true" ? true :false,
-            sizes: JSON.parse(sizes),
-            image:imagesUrl,
+            price: Number(price),
+            bestseller: bestseller === "true" || bestseller === true,
+            sizes: parsedSizes,
+            image: imageUrls,
             date: Date.now()
-
-        }
-
-        console.log(productData);
+        };
 
         const product = new ProductModel(productData);
-
-        await product.save()
-
-
-        
-
+        await product.save();
 
         res.json({
-            success:true,
-            message:'products added suucefully'
-        })
-
+            success: true,
+            message: "Product added successfully"
+        });
 
     } catch (error) {
-        console.log(error);
-
-        res.json({ success: false, message: error.message })
-
-
+        console.error("Add Product Error:", error);
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
     }
-
-
 };
 
 // list all products
@@ -72,7 +56,7 @@ const listproduct = async (req, res) => {
     try {
         const products = await ProductModel.find({});
         res.json({
-            success:true,
+            success: true,
             products
         })
 
@@ -82,7 +66,7 @@ const listproduct = async (req, res) => {
 
         res.json({ success: false, message: error.message })
 
-        
+
     }
 };
 
@@ -92,10 +76,10 @@ const removeproduct = async (req, res) => {
 
         await ProductModel.findByIdAndDelete(req.body.id);
         res.json({
-            succes:true,
-            message:"product removed"
+            succes: true,
+            message: "product removed"
         })
-        
+
     } catch (error) {
         console.log(error);
 
@@ -108,14 +92,14 @@ const removeproduct = async (req, res) => {
 
 // single product info
 const singleproduct = async (req, res) => {
-    
+
     try {
-        const {productId} = req.body;
+        const { productId } = req.body;
 
         const product = await ProductModel.findById(productId)
 
         res.json({
-            succes:true,
+            succes: true,
             product
         })
     } catch (error) {
