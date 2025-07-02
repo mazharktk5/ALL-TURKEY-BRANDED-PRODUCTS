@@ -6,10 +6,10 @@ import { toast } from 'react-toastify'
 
 const Add = ({ token }) => {
 
-    const [image1, setImage1] = useState(false)
-    const [image2, setImage2] = useState(false)
-    const [image3, setImage3] = useState(false)
-    const [image4, setImage4] = useState(false)
+    const [image2, setImage2] = useState()
+    const [image1, setImage1] = useState()
+    const [image3, setImage3] = useState()
+    const [image4, setImage4] = useState()
 
 
     const [name, setName] = useState('')
