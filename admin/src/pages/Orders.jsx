@@ -88,6 +88,8 @@ const Orders = ({ token }) => {
             </div>
             <div className="text-right space-y-2">
               <p className="font-bold text-lg">{currency}{order.amount}</p>
+              <p className="text-sm text-gray-600">Payment Method: {order.paymentMethod}</p>
+              <p className="text-sm text-gray-600">Payment Status: {order.payment ? "Paid" : "Unpaid"}</p>
               <select value={order.status} onChange={(e) => statusHandler(e, order._id)} className="border rounded px-2 py-1 text-sm">
                 <option value="OrderPlaced">Order Placed</option>
                 <option value="Packing">Packing</option>
@@ -97,6 +99,7 @@ const Orders = ({ token }) => {
               </select>
               <p className="text-xs text-gray-500">{new Date(order.date).toLocaleDateString()}</p>
             </div>
+
           </div>
         ))}
       </div>

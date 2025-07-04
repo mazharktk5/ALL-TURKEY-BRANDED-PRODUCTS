@@ -54,6 +54,12 @@ import p_img50 from './p_img50.png'
 import p_img51 from './p_img51.png'
 import p_img52 from './p_img52.png'
 import turkey_logo from './turkey_logo.jpg'
+import her01 from './her01.jpg'
+import img1 from './img1.jpg'
+import img2 from './img2.jpg'
+import img3 from './img3.jpg'
+import hero3 from './hero3.jpg'
+import shoes1 from './shoes1.jpg'
 
 
 import logo from './logo.png'
@@ -94,7 +100,14 @@ export const assets = {
     razorpay_logo,
     stripe_logo,
     cross_icon,
-    turkey_logo
+    turkey_logo,
+    her01,
+    img1,
+    img2,
+    img3,
+    hero3,
+    shoes1,
+
 }
 
 export const products = [

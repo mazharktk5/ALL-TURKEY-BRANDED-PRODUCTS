@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 
 const productSchema = new mongoose.Schema({
-    
-    
+
+
     name: {
         type: String,
         required: true,
@@ -19,13 +19,13 @@ const productSchema = new mongoose.Schema({
         min: 0
     },
     image: {
-        type: [String], 
+        type: [String],
         required: true
     },
     category: {
         type: String,
         required: true,
-        enum: ["Men", "Women", "Kids"] // Optional: enforce categories
+        enum: ["Men", "Women", "Kids", "Shoes"]
     },
     subCategory: {
         type: String,
@@ -48,4 +48,4 @@ const productSchema = new mongoose.Schema({
 
 const ProductModel = mongoose.model('Product', productSchema);
 
-export default ProductModel  ;
+export default ProductModel;
