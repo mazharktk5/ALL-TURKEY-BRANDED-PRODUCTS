@@ -73,6 +73,10 @@ const PlaceOrderStrip = async (req, res) => {
             date: Date.now()
         };
 
+
+
+
+
         const newOrder = new orderModel(orderData);
         await newOrder.save();
 
@@ -86,6 +90,8 @@ const PlaceOrderStrip = async (req, res) => {
             },
             quantity: item.quantity,
         }));
+
+        // Add delivery charges to line items
 
         line_items.push({
             price_data: {
@@ -236,5 +242,5 @@ const updateStatus = async (req, res) => {
 }
 
 
-export {verifyStripe, PlaceOrder, PlaceOrderStrip, PlaceOrderRazorPay, userOrders, allOrders, updateStatus }
+export { verifyStripe, PlaceOrder, PlaceOrderStrip, PlaceOrderRazorPay, userOrders, allOrders, updateStatus }
 

@@ -70,10 +70,37 @@ const PlaceOrder = () => {
             orderData,
             { headers: { token } }
           )
+          // if (response.data.success) {
+          //   setCartItems({})
+          //   navigate('/orders')
+
           if (response.data.success) {
-            setCartItems({})
-            navigate('/orders')
-          } else {
+            const phoneNumber = "";
+
+
+            const itemLines = orderItems
+              .map(item => `- ${item.name} (${item.size}) x ${item.quantity}`)
+              .join("%0A");
+
+            const msg = `Hello, I want to place an order:%0A%0A${itemLines}%0A%0ATotal: ${getCartAmount() + delivery_fee} PKR%0A%0ADelivery Info:%0AName: ${formData.firstName} ${formData.lastName}%0AEmail: ${formData.email}%0APhone: ${formData.phone}%0AAddress: ${formData.street}, ${formData.city}, ${formData.state}, ${formData.country} - ${formData.zipcode}`;
+
+            const url = `https://wa.me/${phoneNumber}?text=${msg}`;
+
+
+
+            window.open(url, "_blank");
+            toast.success('Order placed successfully! Redirecting to orders page...');
+
+
+            setCartItems({});
+
+
+            setTimeout(() => {
+              navigate('/orders');
+            }, 1000);
+          }
+
+          else {
             toast.error(response.data.message)
           }
           break
@@ -211,7 +238,7 @@ const PlaceOrder = () => {
         <div className='space-y-6'>
           <Title text1='PAYMENT' text2='METHOD' />
 
-          <div className='flex flex-col gap-4 md:flex-row'>
+          {/* <div className='flex flex-col gap-4 md:flex-row'>
             <div
               onClick={() => setMethod('stripe')}
               className={`payment-option ${method === 'stripe' && 'selected'}`}
@@ -231,7 +258,7 @@ const PlaceOrder = () => {
               ></p>
               <p className='text-sm font-medium text-gray-600'>Cash on Delivery</p>
             </div>
-          </div>
+          </div> */}
 
           <div className='w-full text-end'>
             <button

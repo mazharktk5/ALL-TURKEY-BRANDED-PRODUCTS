@@ -32,6 +32,7 @@ const ShopContextProvider = ({ children }) => {
         if (cartData[itemId]) {
             if (cartData[itemId][size]) {
                 cartData[itemId][size] += 1
+                toast.success("Item added to cart")
 
 
             } else {
