@@ -39,6 +39,11 @@ const PlaceOrder = () => {
 
   const onSubmitHandler = async (e) => {
     e.preventDefault()
+
+    if (!token) {
+      toast.error('Please login to place an order!');
+      return;
+    }
     try {
       let orderItems = []
 
@@ -75,14 +80,14 @@ const PlaceOrder = () => {
           //   navigate('/orders')
 
           if (response.data.success) {
-            const phoneNumber = "";
+            const phoneNumber = "+923115482400";
 
 
             const itemLines = orderItems
               .map(item => `- ${item.name} (${item.size}) x ${item.quantity}`)
               .join("%0A");
 
-            const msg = `Hello, I want to place an order:%0A%0A${itemLines}%0A%0ATotal: ${getCartAmount() + delivery_fee} PKR%0A%0ADelivery Info:%0AName: ${formData.firstName} ${formData.lastName}%0AEmail: ${formData.email}%0APhone: ${formData.phone}%0AAddress: ${formData.street}, ${formData.city}, ${formData.state}, ${formData.country} - ${formData.zipcode}`;
+            const msg = `Hello, I want to place an order:%0A%0A${itemLines}%0A%0ATotal: ${getCartAmount() + delivery_fee} USD%0A%0ADelivery Info:%0AName: ${formData.firstName} ${formData.lastName}%0AEmail: ${formData.email}%0APhone: ${formData.phone}%0AAddress: ${formData.street}, ${formData.city}, ${formData.state}, ${formData.country} - ${formData.zipcode}`;
 
             const url = `https://wa.me/${phoneNumber}?text=${msg}`;
 
@@ -105,18 +110,18 @@ const PlaceOrder = () => {
           }
           break
 
-        case 'stripe':
-          const stripeResponse = await axios.post(
-            backendUrl + '/api/order/placeOrderStripe',
-            orderData,
-            { headers: { token } }
-          )
-          if (stripeResponse.data.success) {
-            window.location.href = stripeResponse.data.url
-          } else {
-            toast.error(stripeResponse.data.message)
-          }
-          break
+        // case 'stripe':
+        //   const stripeResponse = await axios.post(
+        //     backendUrl + '/api/order/placeOrderStripe',
+        //     orderData,
+        //     { headers: { token } }
+        //   )
+        //   if (stripeResponse.data.success) {
+        //     window.location.href = stripeResponse.data.url
+        //   } else {
+        //     toast.error(stripeResponse.data.message)
+        //   }
+        // break
 
         default:
           break
@@ -236,7 +241,7 @@ const PlaceOrder = () => {
         <CartTotal />
 
         <div className='space-y-6'>
-          <Title text1='PAYMENT' text2='METHOD' />
+          {/* <Title text1='PAYMENT' text2='METHOD' /> */}
 
           {/* <div className='flex flex-col gap-4 md:flex-row'>
             <div
@@ -263,7 +268,7 @@ const PlaceOrder = () => {
           <div className='w-full text-end'>
             <button
               type='submit'
-              className='bg-black hover:bg-gray-900 transition text-white px-8 py-3 rounded-lg text-sm font-medium shadow-md'
+              className='bg-black hover:bg-gray-900 transition cursor-pointer text-white px-8 py-3 rounded-lg text-sm font-medium shadow-md'
             >
               PLACE ORDER
             </button>
