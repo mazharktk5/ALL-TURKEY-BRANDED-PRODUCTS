@@ -27,6 +27,10 @@ const ShopContextProvider = ({ children }) => {
             toast.error("Please select a size.");
             return;
         }
+        if (!token) {
+            toast.error("Please login to add items to cart");
+            return;
+        }
 
         let cartData = structuredClone(cartItems)
         if (cartData[itemId]) {
