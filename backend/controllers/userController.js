@@ -1,11 +1,11 @@
 import UserModel from "../models/userModel.js";
-import bcrypt from 'bcrypt';
-import { response } from "express";
-import jwt from 'jsonwebtoken'
-import validator from 'validator';
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import validator from "validator";
 
-
-
+/* ================================
+   🔐 JWT Token Generator
+================================= */
 const createToken = (id) => {
     if (!process.env.JWT_SECRET) {
         throw new Error("JWT_SECRET is not defined");
@@ -14,9 +14,9 @@ const createToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "7d" });
 };
 
-
-
-// login
+/* ================================
+   🔓 User Login
+================================= */
 const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -54,7 +54,7 @@ const loginUser = async (req, res) => {
         res.status(200).json({
             success: true,
             message: "Login successful",
-            token, // <-- Send the token
+            token,
             user: {
                 _id: user._id,
                 name: user.name,
@@ -71,14 +71,9 @@ const loginUser = async (req, res) => {
     }
 };
 
-
-
-
-
-// register
-
-
-
+/* ================================
+   📝 Register New User
+================================= */
 const registerUser = async (req, res) => {
     try {
         const { name, email, password } = req.body;
@@ -101,7 +96,7 @@ const registerUser = async (req, res) => {
         if (!validator.isStrongPassword(password, { minLength: 8 })) {
             return res.status(400).json({
                 success: false,
-                message: "Password must be at least 8 characters long and must have 1 special char i upper case and 1 lower case"
+                message: "Password must be at least 8 characters long and must have 1 special char, 1 upper case and 1 lower case"
             });
         }
 
@@ -127,10 +122,8 @@ const registerUser = async (req, res) => {
 
         await newUser.save();
 
-        const token = createToken(newUser._id)
-
-
-        // response.json({success:true,token})
+        // Generate token for newly registered user
+        const token = createToken(newUser._id);
 
         res.status(201).json({
             success: true,
@@ -152,36 +145,36 @@ const registerUser = async (req, res) => {
     }
 };
 
-
-// admin login
+/* ================================
+   🛡️ Admin Login
+================================= */
 const adminLogin = async (req, res) => {
-
     try {
+        const { email, password } = req.body;
 
-        const {email,password} = req.body
-
-        if(email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD){
-            const token = jwt.sign(email,process.env.JWT_SECRET)
-            res.json(
-                {
-                success:true,
-                token
-            }
-            )
-        }else{
+        if (
+            email === process.env.ADMIN_EMAIL &&
+            password === process.env.ADMIN_PASSWORD
+        ) {
+            const token = jwt.sign(email, process.env.JWT_SECRET);
             res.json({
-                success:false,
-                message:"invalid credintial"
-            })
+                success: true,
+                token
+            });
+        } else {
+            res.json({
+                success: false,
+                message: "Invalid credential"
+            });
         }
-        
+
     } catch (error) {
         res.status(500).json({
             success: false,
             message: "Internal Server Error"
         });
     }
+};
 
-}
-
-export { loginUser, registerUser, adminLogin }
+// Export functions
+export { loginUser, registerUser, adminLogin };

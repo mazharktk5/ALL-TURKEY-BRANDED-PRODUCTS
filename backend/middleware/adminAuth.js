@@ -1,37 +1,43 @@
-import jwt from "jsonwebtoken"
+// Import JWT for token verification
+import jwt from "jsonwebtoken";
 
-const adminAuth = async (req,res,next)=>{
+// Middleware to authenticate admin user
+const adminAuth = async (req, res, next) => {
     try {
-        
-         const {token} = req.headers;
+        // Extract token from request headers
+        const { token } = req.headers;
 
-         if(!token){
+        // If token is missing, deny access
+        if (!token) {
             return res.json({
-                success:false,
-                message:"Access Denied"
-            })
-         }
+                success: false,
+                message: "Access Denied",
+            });
+        }
 
-         const token_decode = jwt.verify(token,process.env.JWT_SECRET);
+        // Verify and decode the token using the secret key
+        const token_decode = jwt.verify(token, process.env.JWT_SECRET);
 
-         if (token_decode !== process.env.ADMIN_EMAIL) {
+        // Check if the decoded token matches the admin email
+        if (token_decode !== process.env.ADMIN_EMAIL) {
             return res.json({
-                success:false,
-                message:"Access Denied"
-            })
-         }
-         next()
+                success: false,
+                message: "Access Denied",
+            });
+        }
+
+        // Proceed to the next middleware or route handler
+        next();
 
     } catch (error) {
         console.log(error);
+
+        // Handle token verification or other errors
         res.json({
-            success:false,
-            message:"error.message"
-        })
-        
+            success: false,
+            message: error.message, // fixed mistake: used literal string before
+        });
     }
+};
 
-    
-}
-
-export default adminAuth
+export default adminAuth;
