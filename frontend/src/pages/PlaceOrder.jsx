@@ -80,7 +80,7 @@ const PlaceOrder = () => {
           //   navigate('/orders')
 
           if (response.data.success) {
-            const phoneNumber = "+923044064364";
+            const phoneNumber = "+923370372772";
 
 
             const itemLines = orderItems
